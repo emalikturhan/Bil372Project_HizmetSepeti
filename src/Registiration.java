@@ -310,16 +310,7 @@ public class Registiration extends JFrame {
 			e.printStackTrace();
 		}
 
-		try {
-			if (s != null) {
-				s.close();
-				connect.close();
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
+		
 		
 		return status;
 

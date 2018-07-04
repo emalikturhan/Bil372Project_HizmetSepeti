@@ -2,12 +2,14 @@
     import java.awt.*;
     import java.awt.event.*;
     class TabbedPane extends JFrame {
-        JTabbedPane tabs;
+        JTabbedPane tabs;        
         GiveServicePanel course;
         TakeServicePanel selectCourse;
         ProfilePanel profilePanel;
+        AboutPanel aboutPanel;
+        
         TabbedPane() {
-            super("Tabbed Pane Example");
+            super("Home Page");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             
             // Setting the JTabbedPane Position and Layout as Wrap
@@ -15,6 +17,8 @@
             course = new GiveServicePanel();
             selectCourse = new TakeServicePanel();
             profilePanel= new ProfilePanel();
+            aboutPanel = new AboutPanel();
+            
             // Adding user defined pannels to JTabbedPane
             
             
@@ -26,48 +30,13 @@
             
             // Adding JPanels to JTabbedPane
             tabs.addTab("Profile           ",new ImageIcon("/home/user/workspace/372 Gui/src/profile.png"), profilePanel);
-            tabs.addTab("Comment", new JTextArea(10, 40));
-            tabs.addTab("More..", new JPanel());
+           
+            tabs.addTab("About..",aboutPanel);
 
             getContentPane().add(tabs);
         }
     }
-    /*Creating CoursePanel by extending JPanel*/
-    class GiveServicePanel extends JPanel {
-        JButton addCourse, clear;
-        GiveServicePanel() {
-            addCourse = new JButton("Add Course");
-            clear = new JButton("Clear");
-            setLayout(new FlowLayout());
-            add(addCourse);
-            add(clear);
-        }
-    }
-    /*Creating SelectCoursePanel by extending JPanel*/
-    class TakeServicePanel extends JPanel {
-        JCheckBox java, swing, hibernate;
-        TakeServicePanel() {
-            java = new JCheckBox("Java");
-            swing = new JCheckBox("Spring");
-            hibernate = new JCheckBox("Hibernate");
-            setLayout(new FlowLayout());
-            add(java);
-            add(swing);
-            add(hibernate);
-        }
-    }
-    class ProfilePanel extends JPanel {
-        JCheckBox java, swing, hibernate;
-        ProfilePanel() {
-            java = new JCheckBox("Java");
-            swing = new JCheckBox("Spring");
-            hibernate = new JCheckBox("Hibernate");
-            setLayout(new FlowLayout());
-            add(java);
-            add(swing);
-            add(hibernate);
-        }
-    }
+       
     class HomePage {
         public static void main(String args[]) throws Exception {
             
