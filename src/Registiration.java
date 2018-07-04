@@ -28,7 +28,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class MyForm extends JFrame {
+public class Registiration extends JFrame {
 	
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
@@ -46,7 +46,7 @@ public class MyForm extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				MyForm frame = new MyForm();
+				Registiration frame = new Registiration();
 				frame.setVisible(true);
 			}
 		});
@@ -55,7 +55,7 @@ public class MyForm extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MyForm() {
+	public Registiration() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 454, 343);
 		 //setSize(700,450);

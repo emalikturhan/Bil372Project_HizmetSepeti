@@ -121,7 +121,7 @@ public class Login extends JFrame implements ActionListener{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				MyForm form = new MyForm();
+				Registiration form = new Registiration();
 				form.setVisible(true);
 				dispose();
 				
@@ -156,11 +156,9 @@ public class Login extends JFrame implements ActionListener{
         		//REZ
         		//DATABASE SORGUSU YAPİLACAK
         		
-        		if(password.equals("1")){ // #1
-        			System.out.println("başarıyla girdiniz");
-        			
-        			newframe form = new newframe(); //  #2 anasayfanın nesnesi olusturulacak
-    				form.setVisible(true);
+        		if(password.equals("1")){ // #1        			
+    				HomePage homepage= new HomePage();
+    				
     				dispose();
         			
         		}else {
