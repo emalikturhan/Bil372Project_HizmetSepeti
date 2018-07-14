@@ -24,12 +24,12 @@
             
           //  ImageIcon img1 = new ImageIcon("/home/user/Desktop/tt/mdpi.png");
             
-            tabs.addTab("Give Service",new ImageIcon("/home/user/workspace/372 Gui/src/giveservice.png"), course);
+            tabs.addTab("Give Service",new ImageIcon("./src/giveservice.png"), course);
          //   ImageIcon img2 = new ImageIcon("home/user/Desktop/tt/ldpi.png");
-            tabs.addTab("Take Service",new ImageIcon("/home/user/workspace/372 Gui/src/takeservice.png"), selectCourse);
+            tabs.addTab("Take Service",new ImageIcon("./src/takeservice.png"), selectCourse);
             
             // Adding JPanels to JTabbedPane
-            tabs.addTab("Profile           ",new ImageIcon("/home/user/workspace/372 Gui/src/profile.png"), profilePanel);
+            tabs.addTab("Profile           ",new ImageIcon("./src/profile.png"), profilePanel);
            
             tabs.addTab("About..",aboutPanel);
 

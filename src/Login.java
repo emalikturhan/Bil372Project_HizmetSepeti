@@ -30,7 +30,7 @@ public class Login extends JFrame implements ActionListener{
         pan = new JPanel();
         pan.setLayout(null);
  
-        logoImage = new ImageIcon("/home/user/workspace/372 Gui/src/bas.png");
+        logoImage = new ImageIcon("./src/bas.png");
  
         lblIcon = new JLabel(logoImage);
  

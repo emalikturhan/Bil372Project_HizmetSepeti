@@ -56,7 +56,7 @@ class ProfilePanel extends JPanel {
            add(x);
             ////////////////////////////////////////////////////
             
-            Font ft=ft = new Font("Verdana",Font.BOLD,15);
+            Font ft = new Font("Verdana",Font.BOLD,15);
             
             JLabel hRegister = new JLabel("Edit Profile");
     		hRegister.setFont(ft);
@@ -137,7 +137,7 @@ class ProfilePanel extends JPanel {
     		//register Icon
     	
     	
-    		 JLabel lblIcon = new JLabel(new ImageIcon("/home/user/workspace/372 Gui/src/profile.png"));
+    		 JLabel lblIcon = new JLabel(new ImageIcon("./src/profile.png"));
     		 lblIcon.setBounds(338, 105, 50, 50);
     		 add(lblIcon);
     		 

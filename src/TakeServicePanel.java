@@ -1,19 +1,31 @@
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 class TakeServicePanel extends JPanel {
-    	JCheckBox java, swing, hibernate;
+	
     	TakeServicePanel() {
-            java = new JCheckBox("Java");
-            setLayout(new FlowLayout());
-            add(java);
-            
+    		 try {
+                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+               } catch (Exception ex) {
+               }
+    		
+    		 
+    		 setLayout(new BorderLayout());
+    		 
+    		 JPanel ustPanel = new JPanel(new FlowLayout());
+    		 JPanel altPanel = new JPanel(new BorderLayout());
+    		 
+    		// ustPanel.setBackground(Color.BLUE);
+    		 altPanel.setBackground(Color.RED);
+    		 add(ustPanel,BorderLayout.NORTH);
+    		 add(altPanel,BorderLayout.CENTER);
+    		 
+         
+
+    		 Font ft = new Font("Verdana",Font.BOLD,15);
+                
             JComboBox comboBox = new JComboBox();
           
             comboBox.addItem( "String" );
@@ -39,13 +51,35 @@ class TakeServicePanel extends JPanel {
             comboBox4.addItem( "String3" );
             comboBox4.addItem( "String4" );
             
-            add(comboBox);
-            add(comboBox2);
-            add(comboBox3);
-            add(comboBox4);
+            ustPanel.add(comboBox);
+            ustPanel. add(comboBox2);
+            ustPanel.add(comboBox3);
+            ustPanel.add(comboBox4);
             
-            JSeparator x = new JSeparator(SwingConstants.HORIZONTAL);
-            x.setPreferredSize(new Dimension(1000,1000));
-           add(x);
+            JButton btnSearch = new JButton("Search");
+            btnSearch.setForeground(new Color(0,170,170)); 
+            ustPanel.add(btnSearch);
+            
+            
+       		DefaultListModel<String> listModel = new DefaultListModel<>();
+            listModel.addElement("USA");
+            listModel.addElement("India");
+            listModel.addElement("Vietnam");
+            listModel.addElement("Canada");
+            listModel.addElement("Denmark");
+            listModel.addElement("France");
+            listModel.addElement("Great Britain");
+            listModel.addElement("Japan");
+     
+            //create the list
+            JList countryList = new JList<>(listModel);
+            altPanel.add(countryList);    
+       		 
         }
+    	public void itemStateChanged(ItemEvent e) {
+    		
+    		if(e.getSource()=="comboBox2"){
+    			System.out.println();
+    		}
+    	}
     }

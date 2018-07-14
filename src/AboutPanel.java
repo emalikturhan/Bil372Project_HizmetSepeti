@@ -58,19 +58,19 @@ class AboutPanel extends JPanel {
                	
     		// Icons
     	    	
-    		 JLabel lblIcon = new JLabel(new ImageIcon("/home/user/workspace/372 Gui/src/user1.png"));
+    		 JLabel lblIcon = new JLabel(new ImageIcon("./src/user1.png"));
     		 lblIcon.setBounds(88, 65, 100, 100);
     		 add(lblIcon);
     		 
-    		 JLabel lblIcon2 = new JLabel(new ImageIcon("/home/user/workspace/372 Gui/src/user2.png"));
+    		 JLabel lblIcon2 = new JLabel(new ImageIcon("./src/user2.png"));
     		 lblIcon2.setBounds(398, 65, 100, 100);
     		 add(lblIcon2);
     		 
-    		 JLabel lblIcon3 = new JLabel(new ImageIcon("/home/user/workspace/372 Gui/src/user3.png"));
+    		 JLabel lblIcon3 = new JLabel(new ImageIcon("./src/user3.png"));
     		 lblIcon3.setBounds(88, 270, 100, 100);
     		 add(lblIcon3);
     		 
-    		 JLabel lblIcon4 = new JLabel(new ImageIcon("/home/user/workspace/372 Gui/src/user4.png"));
+    		 JLabel lblIcon4 = new JLabel(new ImageIcon("./src/user4.png"));
     		 lblIcon4.setBounds(398, 270, 100, 100);
     		 add(lblIcon4);
     		 
