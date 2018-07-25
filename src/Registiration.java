@@ -235,7 +235,7 @@ public class Registiration extends JFrame {
     				dispose();
     				
 					JOptionPane.showMessageDialog(null,
-							"Register Data Successfully");
+							"Register Data Successfully updated.");
 				}
 			}
 		});

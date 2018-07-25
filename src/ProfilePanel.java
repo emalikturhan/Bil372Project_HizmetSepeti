@@ -10,9 +10,9 @@ class ProfilePanel extends JPanel {
 	static PreparedStatement ps = null;
 	static ConnectionManager connect = null;
 
-	private JTextField txtUsername;
-	private JPasswordField txtPassword;
-	private JPasswordField txtConfirmPassword;
+	private JTextField txtUsername = new JTextField(Login.getUsername());
+	private JPasswordField txtPassword = new JPasswordField();
+	private JPasswordField txtConfirmPassword = new JPasswordField();
 	private JTextField tc_no;
 	private JTextField txtFName;
 	private JTextField txtLName;
@@ -32,9 +32,21 @@ class ProfilePanel extends JPanel {
      		JButton btnSave = new JButton("Save");
      		btnSave.setForeground(new Color(0,170,170));     		
      		btnSave.setBounds(161, 17, 89, 23);
-     		add(btnSave);	
+     		add(btnSave);
+
+     		// Sales Record Button
+			JButton btnSales = new JButton("Sales Record");
+			btnSales.setForeground(new Color(0,170,170));
+			btnSales.setBounds(351, 17, 110, 23);
+			add(btnSales);
+
+			// Purchase Record Button
+			JButton btnPurchase = new JButton("Purchase Record");
+			btnPurchase.setForeground(new Color(0,170,170));
+			btnPurchase.setBounds(231, 17, 110, 23);
+			add(btnPurchase);
      		
-     	// Logout Button
+     	    // Logout Button
             JButton btnLogout= new JButton("Log Out");
             btnLogout.setForeground(new Color(0,170,170));
             btnLogout.setBounds(271, 17, 89, 23);
@@ -43,7 +55,7 @@ class ProfilePanel extends JPanel {
             
             JSeparator x = new JSeparator(SwingConstants.HORIZONTAL);
             x.setBounds(0, 60, 1000, 100);
-           add(x);
+            add(x);
             ////////////////////////////////////////////////////
             
             Font ft = new Font("Verdana",Font.BOLD,15);
@@ -119,7 +131,6 @@ class ProfilePanel extends JPanel {
 			txtAdress.setLineWrap(true);
 			txtAdress.setWrapStyleWord(true);
 			txtAdress.setBorder( BorderFactory.createLineBorder(Color.GRAY));
-
 			add(txtAdress);
     		
     		//register Icon
@@ -135,7 +146,7 @@ class ProfilePanel extends JPanel {
 					connect = new ConnectionManager();
 					currentConnection = connect.getConnection();
 					ps = currentConnection.prepareStatement(query);
-					ps.setString(1, Login.getUsername());
+					ps.setString(1, txtUsername.getText());
 					rs = ps.executeQuery();
 					if (rs.next()) {
 						txtFName.setText(rs.getString("fname"));
@@ -155,8 +166,8 @@ class ProfilePanel extends JPanel {
     		 btnSave.addActionListener(new ActionListener() {
     				public void actionPerformed(ActionEvent arg0) {
     					
-    					if(RegisterData()) {// KONTROLLER
-							String insertQuery = "UPDATE appuser set fname=?, set lname=?, set tc_no=?, set email=?, set phone=?, set address=? where user_id=?";
+    					if(true) {// KONTROLLER
+							String insertQuery = "UPDATE appuser set fname=?, lname=?, tc_no=?, address=?, email=?, phone=? where user_id=?";
 							try {
 								ConnectionManager connect = new ConnectionManager();
 								currentConnection = connect.getConnection();
@@ -164,10 +175,10 @@ class ProfilePanel extends JPanel {
 								ps.setString(1, txtFName.getText());
 								ps.setString(2, txtLName.getText());
 								ps.setString(3, tc_no.getText());
-								ps.setString(4, txtEmail.getText());
-								ps.setString(5, txtPhone.getText());
-								ps.setString(6, txtAdress.getText());
-								ps.setString(7, Login.getUsername());
+								ps.setString(4, txtAdress.getText());
+								ps.setString(5, txtEmail.getText());
+								ps.setString(6, txtPhone.getText());
+								ps.setString(7, txtUsername.getText());
 								ps.executeUpdate();
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -184,11 +195,37 @@ class ProfilePanel extends JPanel {
  				public void actionPerformed(ActionEvent arg0) {
  					 					 					
  					JOptionPane.showMessageDialog(null,"Log out Successfully");
-					Login loginPage = new Login(); //  #2 anasayfanın nesnesi olusturulacak
+					Login loginPage = new Login();
 					loginPage.setVisible(true);
 					dispose();
  				}
  			});
+
+				btnSales.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						String query = "select service.service_name, appuser.fname, appuser.lname, sales_record.price, sales.amount_to_pay, sales.amount_paid, sales.s_date" +
+								" from service, customer, appuser, sales_record, sales " +
+								" where service.service_id = sales_record.service_id AND" +
+								" sales.customer_id = customer.customer_id AND" +
+								" customer.user_id = appuser.user_id AND" +
+								" sales.sales_id = sales_record.sales_id";
+						//JOptionPane.showMessageDialog(null,str,"SALES RECORDS", JOptionPane.INFORMATION_MESSAGE);
+
+					}
+				});
+
+				btnPurchase.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						String query = "select service.service_name, appuser.fname, appuser.lname, purchase_record.price, purchase.amount_to_pay, purchase.amount_paid, purchase.p_date" +
+								" from service, provider, appuser, purchase_record, purchase " +
+								" where service.service_id = purchase_record.service_id AND" +
+								" purchase.provider_id = provider.provider_id AND" +
+								" provider.user_id = appuser.user_id AND" +
+								" purchase.purchase_id = purchase_record.purchase_id";
+						//JOptionPane.showMessageDialog(null,str,"PURCHASE RECORDS", JOptionPane.INFORMATION_MESSAGE);
+
+					}
+				});
     		 
         }
             
