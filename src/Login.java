@@ -4,12 +4,17 @@ import javax.swing.*;
 import java.awt.event.*;
  
 public class Login extends JFrame implements ActionListener{
+
+    static Connection currentConnection = null;
+    static ResultSet rs = null;
+    static PreparedStatement ps = null;
+    static ConnectionManager connect = new ConnectionManager();
  
     JPanel pan;
  
     JLabel lblIcon,lblTitle, lblUsername,lblPassword, reg, welcome;
     Icon logoImage;
-    JTextField txtUsername;
+    static private JTextField txtUsername;
     JPasswordField txtPassword;
     JButton btnSubmit,btnReset;
    
@@ -152,23 +157,31 @@ public class Login extends JFrame implements ActionListener{
         if(evt.getSource()==btnSubmit){
         		String username = txtUsername.getText();
         		String password = txtPassword.getText();
-	        	
-        		//REZ
-        		//DATABASE SORGUSU YAPİLACAK
-        		
-        		if(password.equals("1")){ // #1        			
-    				HomePage homepage= new HomePage();
-    				
-    				dispose();
-        			
-        		}else {
-        			
-        			JOptionPane.showMessageDialog(null, "Wrong Password or Username");
-        			txtUsername.setText("");
-                	txtPassword.setText("");
-                	txtUsername.requestFocus();
-        		}
-        		
+        		String searchQuery = "select * from appuser where user_id=? AND user_psw=?";
+
+            currentConnection = connect.getConnection();
+            try {
+                ps = currentConnection.prepareStatement(searchQuery);
+                ps.setString(1, username);
+                ps.setString(2, password);
+                rs = ps.executeQuery();
+                boolean control = rs.next();
+
+                if (control) { // #1
+                    HomePage homepage = new HomePage();
+
+                    dispose();
+
+                } else {
+
+                    JOptionPane.showMessageDialog(null, "Wrong Password or Username");
+                    txtUsername.setText("");
+                    txtPassword.setText("");
+                    txtUsername.requestFocus();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
              
         }
  
@@ -181,5 +194,9 @@ public class Login extends JFrame implements ActionListener{
     public static void main(String args[]){
  
         Login lg = new Login();
+    }
+
+    public static String getUsername() {
+        return txtUsername.getText();
     }
 }

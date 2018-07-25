@@ -2,10 +2,7 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,12 +26,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class Registiration extends JFrame {
+
+	static Connection currentConnection = null;
+	static ResultSet rs = null;
+	static PreparedStatement ps = null;
 	
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
 	private JPasswordField txtConfirmPassword;
-	private JTextField txtName;
+	private JTextField tc_no;
+	private JTextField txtFName;
+	private JTextField txtLName;
 	private JTextField txtEmail;
+	private JTextField txtPhone;
 	private JTextArea txtAdress;
 
 	Font ft;
@@ -59,7 +63,7 @@ public class Registiration extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 454, 343);
 		 //setSize(700,450);
-		setSize(454,400);
+		setSize(500,650);
 	     setLocation(300,150);
 		
 		setTitle("Hizmet Sepeti");
@@ -74,71 +78,95 @@ public class Registiration extends JFrame {
 		hRegister.setForeground(new Color(0,170,50));
 		
 		hRegister.setHorizontalAlignment(SwingConstants.CENTER);
-		hRegister.setBounds(111, 31, 250, 20);
+		hRegister.setBounds(115, 25, 250, 20);
 		getContentPane().add(hRegister);
 
 		// *** Header ***//
 		JLabel hUsername = new JLabel("Username :");
-		hUsername.setBounds(78, 82, 89, 14);
+		hUsername.setBounds(80, 80, 90, 14);
 		hUsername.setForeground(new Color(0,100,100));
 		getContentPane().add(hUsername);
 		
 		JLabel hPassword = new JLabel("Password :");
-		hPassword.setBounds(78, 114, 89, 14);
+		hPassword.setBounds(80, 110, 90, 14);
 		hPassword.setForeground(new Color(0,100,100));
 		getContentPane().add(hPassword);
 		
 		JLabel hConfirmPassword = new JLabel("Confirm Password :");
-		hConfirmPassword.setBounds(77, 143, 140, 14);
+		hConfirmPassword.setBounds(80, 140, 90, 14);
 		hConfirmPassword.setForeground(new Color(0,100,100));
 		getContentPane().add(hConfirmPassword);
-		
-		JLabel hName = new JLabel("Name :");
-		hName.setBounds(78, 178, 89, 14);
-		hName.setForeground(new Color(0,100,100));
-		getContentPane().add(hName);
+
+		JLabel hTC = new JLabel("TC NO :");
+		hTC.setBounds(80, 170, 90, 14);
+		hTC.setForeground(new Color(0,100,100));
+		getContentPane().add(hTC);
+
+		JLabel hFName = new JLabel("First Name :");
+		hFName.setBounds(80, 200, 90, 14);
+		hFName.setForeground(new Color(0,100,100));
+		getContentPane().add(hFName);
+
+		JLabel hLName = new JLabel("Last Name :");
+		hLName.setBounds(80, 230, 90, 14);
+		hLName.setForeground(new Color(0,100,100));
+		getContentPane().add(hLName);
 
 		JLabel hEmail = new JLabel("Email :");
-		hEmail.setBounds(80, 206, 89, 14);
+		hEmail.setBounds(80, 260, 90, 14);
 		hEmail.setForeground(new Color(0,100,100));
 		getContentPane().add(hEmail);
+
+		JLabel hPhone = new JLabel("Phone :");
+		hPhone.setBounds(80, 290, 90, 14);
+		hPhone.setForeground(new Color(0,100,100));
+		getContentPane().add(hPhone);
 		
 		JLabel hAdress = new JLabel("Adress :");
-		hAdress.setBounds(80, 234, 89, 14);
+		hAdress.setBounds(80, 320, 90, 14);
 		hAdress.setForeground(new Color(0,100,100));
 		getContentPane().add(hAdress);
-		
-		
-
 
 		// CustomerID
 		txtUsername = new JTextField("");
-		txtUsername.setBounds(217, 82, 176, 20);
+		txtUsername.setBounds(217, 80, 176, 20);
 		getContentPane().add(txtUsername);
 		
 		// Password
 		txtPassword = new JPasswordField();
-		txtPassword.setBounds(217, 114, 176, 20);
+		txtPassword.setBounds(217, 110, 176, 20);
 		getContentPane().add(txtPassword);
 		
 		// Confirm Password
 		txtConfirmPassword = new JPasswordField();
-		txtConfirmPassword.setBounds(217, 142, 176, 20);
+		txtConfirmPassword.setBounds(217, 140, 176, 20);
 		getContentPane().add(txtConfirmPassword);
 
+		tc_no = new JTextField("");
+		tc_no.setBounds(217, 170, 176, 20);
+		getContentPane().add(tc_no);
+
 		// Name
-		txtName = new JTextField("");
-		txtName.setBounds(217, 170, 176, 20);
-		getContentPane().add(txtName);
+		txtFName = new JTextField("");
+		txtFName.setBounds(217, 200, 176, 20);
+		getContentPane().add(txtFName);
+
+		txtLName = new JTextField("");
+		txtLName.setBounds(217, 230, 176, 20);
+		getContentPane().add(txtLName);
 
 		// Email
 		txtEmail = new JTextField("");
-		txtEmail.setBounds(217, 202, 176, 20);
+		txtEmail.setBounds(217, 260, 176, 20);
 		getContentPane().add(txtEmail);
+
+		txtPhone = new JTextField("");
+		txtPhone.setBounds(217, 290, 176, 20);
+		getContentPane().add(txtPhone);
 		
 		// Adress
 		txtAdress= new JTextArea("");
-		txtAdress.setBounds(217, 234, 176, 60);
+		txtAdress.setBounds(217, 320, 176, 60);
 		txtAdress.setLineWrap(true);
 		txtAdress.setWrapStyleWord(true);
 		txtAdress.setBorder( BorderFactory.createLineBorder(Color.GRAY));
@@ -163,13 +191,16 @@ public class Registiration extends JFrame {
 				txtUsername.setText("");
 				txtPassword.setText("");
 				txtConfirmPassword.setText("");
-				txtName.setText("");
+				tc_no.setText("");
+				txtFName.setText("");
+				txtLName.setText("");
 				txtEmail.setText("");
-				
+				txtPhone.setText("");
+				txtAdress.setText("");
 			}
 		});
 		
-		btnClear.setBounds(78, 317, 89, 23);
+		btnClear.setBounds(80, 420, 89, 23);
 		btnClear.setForeground(new Color(0,170,170));
 		getContentPane().add(btnClear);		
 		
@@ -180,7 +211,25 @@ public class Registiration extends JFrame {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(RegisterData()) {
-					//REZ   #1
+					String insertQuery = "insert into appuser(user_id, user_psw, tc_no, fname, lname, address, email, phone) values (?,?,?,?,?,?,?,?)";
+					try {
+						ConnectionManager connect = new ConnectionManager();
+						currentConnection = connect.getConnection();
+						ps = currentConnection.prepareStatement(insertQuery);
+						ps.setString(1, txtUsername.getText());
+						ps.setString(2, txtPassword.getText());
+						ps.setString(3, tc_no.getText());
+						ps.setString(4, txtFName.getText());
+						ps.setString(5, txtLName.getText());
+						ps.setString(6, txtAdress.getText());
+						ps.setString(7, txtEmail.getText());
+						ps.setString(8, txtPhone.getText());
+						ps.executeUpdate();
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+						finalizeConnection(currentConnection, ps, rs);
+					}
 					Login loginPage = new Login(); //  #2 anasayfanın nesnesi olusturulacak
 					loginPage.setVisible(true);
     				dispose();
@@ -190,7 +239,7 @@ public class Registiration extends JFrame {
 				}
 			}
 		});
-		btnSave.setBounds(181, 317, 89, 23);
+		btnSave.setBounds(180, 420, 89, 23);
 		getContentPane().add(btnSave);		
 		
 		
@@ -218,101 +267,90 @@ public class Registiration extends JFrame {
 
 	}
 	
-	private Boolean RegisterData()
-	{
-		
+	private Boolean RegisterData() {
 		String strUsername = txtUsername.getText();
 		String strPassword = new String(txtPassword.getPassword());
 		String strConfirmPassword = new String(txtConfirmPassword.getPassword());
-		String strName = txtName.getText();
+		String strTCNO = tc_no.getText();
+		String strFName = txtFName.getText();
+		String strLName = txtLName.getText();
 		String strEmail = txtEmail.getText();
-		
-		if(strUsername.equals("")) // Username
-		{
-			JOptionPane.showMessageDialog(null,
-					"Please Input (Username)");
-			txtUsername.requestFocusInWindow(); 
+		String strPhone = txtPhone.getText();
+		String strAddress = txtAdress.getText();
+
+		String searchQuery1 = "select * from appuser where user_id=?";
+		String searchQuery2 = "select * from appuser where email=?";
+		try {
+			ConnectionManager connect = new ConnectionManager();
+			currentConnection = connect.getConnection();
+			ps = currentConnection.prepareStatement(searchQuery1);
+			ps.setString(1, txtUsername.getText());
+			rs = ps.executeQuery();
+			boolean controlID = rs.next();
+			if (controlID) {
+				JOptionPane.showMessageDialog(null,
+						"Bu kullanici adi daha once alinmistir. Lutfen yeni bir kullanici adi giriniz.");
+				txtPassword.requestFocusInWindow();
+				return false;
+			} else {
+				ps = currentConnection.prepareStatement((searchQuery2));
+				ps.setString(1, txtEmail.getText());
+				rs = ps.executeQuery();
+				boolean controlEmail = rs.next();
+				if (controlEmail) {
+					JOptionPane.showMessageDialog(null,
+							"Bu e-maile sahip kullanici vardir. Lutfen baska e-mail deneyiniz.");
+					txtPassword.requestFocusInWindow();
+					return false;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
+		} finally {
+			finalizeConnection(currentConnection, ps, rs);
 		}
-		if(strPassword.equals("")) // Password
-		{
-			JOptionPane.showMessageDialog(null,
-					"Please Input (Password)");
-			txtPassword.requestFocusInWindow(); 
-			return false;
-		}
-		
-		if(strConfirmPassword.equals("")) // Confirm Password
-		{
-			JOptionPane.showMessageDialog(null,
-					"Please Input (Confirm Password)");
-			txtConfirmPassword.requestFocusInWindow(); 
-			return false;
-		}
-		if(!strPassword.equals(strConfirmPassword)) // Password math
+
+		if (!strPassword.equals(strConfirmPassword)) // Password math
 		{
 			JOptionPane.showMessageDialog(null,
 					"Please Input (Password Not Match!)");
-			txtPassword.requestFocusInWindow(); 
+			txtPassword.requestFocusInWindow();
 			return false;
-		}		
-		if(strName.equals("")) // Name
-		{
-			JOptionPane.showMessageDialog(null,
-					"Please Input (Name)");
-			txtName.requestFocusInWindow(); 
-			return false;
-		}	
-		
-		if(strEmail.equals("")) // Email
-		{
-			JOptionPane.showMessageDialog(null,
-					"Please Input (Email)");
-			txtEmail.requestFocusInWindow(); 
-			return false;
-		}	
-		
-		Connection connect = null;
-		Statement s = null;
-		Boolean status = false;
-
-		try {
-			/*Class.forName("com.mysql.jdbc.Driver");
-
-			connect = DriverManager.getConnection(""
-					+ "jdbc:mysql://localhost/mydatabase"
-					+ "?user=root&password=root");
-
-			s = connect.createStatement();*/
-			
-			// SQL Insert
-			String sql = "INSERT INTO member "
-					+ "(Username,Password,Email,Name) "
-					+ "VALUES ('" + strUsername + "','"
-					+ strPassword + "','"
-					+ strEmail + "'" + ",'"
-					+ strName + "') ";
-			//s.execute(sql);
-		
-			System.out.println(sql);
-			// Reset Text Fields
-			txtUsername.setText("");
-			txtPassword.setText("");
-			txtConfirmPassword.setText("");
-			txtName.setText("");
-			txtEmail.setText("");
-				
-			status  = true;
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			e.printStackTrace();
 		}
 
-		
-		
-		return status;
+		if (strUsername.equals("") || strPassword.equals("") || strTCNO.equals("") || strFName.equals("")
+				|| strLName.equals("") || strEmail.equals("") || strPhone.equals("") || strAddress.equals("")) {
+			JOptionPane.showMessageDialog(null,
+					"Lutfen tum bilgileri giriniz!");
+			txtFName.requestFocusInWindow();
+			return false;
+		}
+		return true;
+	}
 
+	public static void finalizeConnection(Connection connection, PreparedStatement preparedStatement,
+										  ResultSet resultSet) {
+		if (resultSet != null) {
+			try {
+				resultSet.close();
+			} catch (Exception e) {
+			}
+			resultSet = null;
+		}
+		if (preparedStatement != null) {
+			try {
+				preparedStatement.close();
+			} catch (Exception e) {
+			}
+			preparedStatement = null;
+		}
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (Exception e) {
+			}
+			connection = null;
+		}
 	}
 }
