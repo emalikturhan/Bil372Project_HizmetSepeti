@@ -175,7 +175,7 @@ public class Registiration extends JFrame {
 		
 		//register Icon
 	
-		 regIcon = new ImageIcon("/home/user/workspace/372 Gui/src/mdpi.png");
+		 regIcon = new ImageIcon("./src/mdpi.png");
 		 JLabel lblIcon = new JLabel(regIcon);
 		 lblIcon.setBounds(338, 15, 50, 50);
 		 getContentPane().add(lblIcon);
@@ -245,7 +245,7 @@ public class Registiration extends JFrame {
 		
 		 //Back Button
 		 
-		 back = new ImageIcon("/home/user/workspace/372 Gui/src/aa.png");
+		 back = new ImageIcon("./src/aa.png");
 		 
 		 JButton btnBack = new JButton("Back");
 		 btnBack.setBounds(5, 5, 75, 35);

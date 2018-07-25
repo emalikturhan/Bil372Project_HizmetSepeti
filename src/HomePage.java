@@ -2,6 +2,7 @@
     import java.awt.*;
     import java.awt.event.*;
     class TabbedPane extends JFrame {
+    	
         JTabbedPane tabs;        
         GiveServicePanel course;
         TakeServicePanel selectCourse;
