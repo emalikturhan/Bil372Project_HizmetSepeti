@@ -179,8 +179,7 @@ public class AddQualifiedServicePage extends JFrame {
                     }
                     JOptionPane.showMessageDialog(null,
                             "Register Data Successfully updated.");
-                    GiveServicePanel gsp = new GiveServicePanel();
-                    gsp.setVisible(true);
+                    HomePage homepage = new HomePage();
                     dispose();
                 }
             }

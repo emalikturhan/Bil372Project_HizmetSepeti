@@ -12,10 +12,9 @@ class GiveServicePanel extends JPanel {
     static ResultSet rs = null;
     static PreparedStatement ps = null;
     static ConnectionManager connect = null;
-    static private DefaultListModel<String> listModel = new DefaultListModel<>();
-    static int count = 1;
-
-    String selectedItem = "";
+    private JList countryList;
+    private JPanel altPanel;
+    private DefaultListModel<String> listModel;
 
     GiveServicePanel() {
         try {
@@ -27,7 +26,7 @@ class GiveServicePanel extends JPanel {
         setLayout(new BorderLayout());
 
         JPanel ustPanel = new JPanel(new FlowLayout());
-        JPanel altPanel = new JPanel(new BorderLayout());
+        altPanel = new JPanel(new BorderLayout());
 
         // ustPanel.setBackground(Color.BLUE);
         altPanel.setBackground(Color.RED);
@@ -37,11 +36,41 @@ class GiveServicePanel extends JPanel {
 
 
         Font ft = new Font("Verdana",Font.BOLD,15);
-
-        update();
-
+        listModel = new DefaultListModel<>();
+        int count = 1;
+        while(true) {
+            String query = "select service_id, fname, lname, appuser.user_id, service_name, service_type, location, price from service, appuser where service_id = " + count + " AND " +
+                    "appuser.user_id = service.user_id";
+            try {
+                connect = new ConnectionManager();
+                currentConnection = connect.getConnection();
+                ps = currentConnection.prepareStatement(query);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    if(rs.getString("user_id").equals(Login.getUsername())) {
+                        String provider = rs.getString("fname") + rs.getString("lname");
+                        Query que = new Query(rs.getString("service_id"), provider, rs.getString("service_name")
+                                , rs.getString("service_type"), rs.getString("location"), rs.getString("price"));
+                        String tmp = que.price;
+                        if(tmp.indexOf('.') != -1) {
+                            tmp = tmp.substring(0, tmp.indexOf('.') + 3);
+                        }
+                        String str = "ID: " + que.id + "; Provider: " + que.provider + "; Name: " + que.name + "; Type: " + que.type + "; Location: " + que.location + "; Price: " + tmp;
+                        listModel.addElement(str);
+                        listModel.addElement("\n");
+                    }
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                finalizeConnection(currentConnection, ps, rs);
+            }
+            count++;
+        }
         //create the list
-        JList countryList = new JList<>(listModel);
+        countryList = new JList<>(listModel);
         altPanel.add(countryList);
 
 
@@ -57,8 +86,7 @@ class GiveServicePanel extends JPanel {
 
                 AddQualifiedServicePage page = new AddQualifiedServicePage();
                 page.setVisible(true);
-
-                System.out.println(countryList.getSelectedValue());
+                dispose();
             }
         });
 
@@ -72,8 +100,7 @@ class GiveServicePanel extends JPanel {
 
                 AddUnqualifiedServicePage page = new AddUnqualifiedServicePage();
                 page.setVisible(true);
-
-                System.out.println(countryList.getSelectedValue());
+                dispose();
             }
         });
 
@@ -100,10 +127,12 @@ class GiveServicePanel extends JPanel {
                         if (rs.next()) {
                             EditQServicePage frame = new EditQServicePage(serviceID); // parapetre olarak editelenecek işin ıd si yollancak
                             frame.setVisible(true);
+                            dispose();
                         }
                         else {
                             EditUQServicePage frame = new EditUQServicePage(serviceID); // parapetre olarak editelenecek işin ıd si yollancak
                             frame.setVisible(true);
+                            dispose();
                         }
                     } catch (Exception exp) {
                         exp.printStackTrace();
@@ -120,42 +149,6 @@ class GiveServicePanel extends JPanel {
         });
 
 
-    }
-
-    protected void update() {
-        while(true) {
-            String query = "select service_id, fname, lname, appuser.user_id, service_name, service_type, location, price from service, appuser where service_id = " + count + " AND " +
-                    "appuser.user_id = service.user_id";
-            try {
-                connect = new ConnectionManager();
-                currentConnection = connect.getConnection();
-                ps = currentConnection.prepareStatement(query);
-                rs = ps.executeQuery();
-                if (rs.next()) {
-                    if(rs.getString("user_id").equals(Login.getUsername())) {
-                        String provider = rs.getString("fname") + rs.getString("lname");
-                        Query que = new Query(rs.getString("service_id"), provider, rs.getString("service_name")
-                                , rs.getString("service_type"), rs.getString("location"), rs.getString("price"));
-                        String str = "ID: " + que.id + "; Provider: " + que.provider + "; Name: " + que.name + "; Type: " + que.type + "; Location: " + que.location + "; Price: " + que.price;
-                        listModel.addElement(str);
-                        listModel.addElement("\n");
-                    }
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                finalizeConnection(currentConnection, ps, rs);
-            }
-            count++;
-        }
-    }
-
-    protected void update2(int id, String str) {
-        listModel.set((id -1), str);
-        GiveServicePanel gsp = new GiveServicePanel();
-        gsp.setVisible(true);
     }
 
     public static void finalizeConnection(Connection connection, PreparedStatement preparedStatement,
@@ -182,7 +175,10 @@ class GiveServicePanel extends JPanel {
             connection = null;
         }
     }
-
+    public void dispose() {
+        JFrame parent = (JFrame) this.getTopLevelAncestor();
+        parent.dispose();
+    }
 }
 
 class Query {

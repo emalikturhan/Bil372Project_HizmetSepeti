@@ -13,8 +13,6 @@ class TakeServicePanel extends JPanel {
     static ResultSet rs = null;
     static PreparedStatement ps = null;
     static ConnectionManager connect = null;
-    static private DefaultListModel<String> listModel = new DefaultListModel<>();
-    static int count = 1;
 
     String txtCmb="";
     String txtCmb2="";
@@ -109,6 +107,8 @@ class TakeServicePanel extends JPanel {
             }
         });
 
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        int count = 1;
         while(true) {
             String query = "select service_id, fname, lname, appuser.user_id, service_name, service_type, location, price from service, appuser where service_id = " + count + " AND " +
                     "appuser.user_id = service.user_id";
@@ -122,7 +122,11 @@ class TakeServicePanel extends JPanel {
                         String provider = rs.getString("fname") + rs.getString("lname");
                         Query que = new Query(rs.getString("service_id"), provider, rs.getString("service_name")
                                 , rs.getString("service_type"), rs.getString("location"), rs.getString("price"));
-                        String str = "ID: " + que.id + "; Provider: " + que.provider + "; Name: " + que.name + "; Type: " + que.type + "; Location: " + que.location + "; Price: " + que.price;
+                        String tmp = que.price;
+                        if(tmp.indexOf('.') != -1) {
+                            tmp = tmp.substring(0, tmp.indexOf('.') + 3);
+                        }
+                        String str = "ID: " + que.id + "; Provider: " + que.provider + "; Name: " + que.name + "; Type: " + que.type + "; Location: " + que.location + "; Price: " + tmp;
                         listModel.addElement(str);
                         listModel.addElement("\n");
                     }

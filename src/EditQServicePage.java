@@ -183,6 +183,7 @@ public class EditQServicePage extends JFrame {
                     }
                     JOptionPane.showMessageDialog(null,
                             "Register Data Successfully updated.");
+                    HomePage homepage = new HomePage();
                     dispose();
                 }
             }

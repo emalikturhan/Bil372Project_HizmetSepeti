@@ -165,11 +165,7 @@ public class EditUQServicePage extends JFrame {
                     }
                     JOptionPane.showMessageDialog(null,
                             "Register Data Successfully updated.");
-                    GiveServicePanel gsp = new GiveServicePanel();
-                    String str = "ID: " + serviceID + "; Name: " + txtServicename.getText() + "; Type: " + txtType.getText() +
-                            "; Location: " + txtLocation.getText() + "; Price: " + txtPrice.getText();
-                    gsp.update2(Integer.parseInt(serviceID), str);
-                    gsp.setVisible(true);
+                    HomePage homepage = new HomePage();
                     dispose();
                 }
             }

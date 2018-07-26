@@ -193,7 +193,6 @@ class ProfilePanel extends JPanel {
 
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
 				JOptionPane.showMessageDialog(null,"Log out Successfully");
 				Login loginPage = new Login();
 				loginPage.setVisible(true);
