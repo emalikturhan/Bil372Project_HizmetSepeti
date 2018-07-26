@@ -170,7 +170,6 @@ public class Registiration extends JFrame {
 		txtAdress.setLineWrap(true);
 		txtAdress.setWrapStyleWord(true);
 		txtAdress.setBorder( BorderFactory.createLineBorder(Color.GRAY));
-		
 		getContentPane().add(txtAdress);
 		
 		//register Icon
@@ -212,6 +211,8 @@ public class Registiration extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(RegisterData()) {
 					String insertQuery = "insert into appuser(user_id, user_psw, tc_no, fname, lname, address, email, phone) values (?,?,?,?,?,?,?,?)";
+					String insertQuery1 = "INSERT INTO customer (user_id) values (?)";
+					String insertQuery2 = "INSERT INTO provider (user_id) values (?)";
 					try {
 						ConnectionManager connect = new ConnectionManager();
 						currentConnection = connect.getConnection();
@@ -224,6 +225,12 @@ public class Registiration extends JFrame {
 						ps.setString(6, txtAdress.getText());
 						ps.setString(7, txtEmail.getText());
 						ps.setString(8, txtPhone.getText());
+						ps.executeUpdate();
+						ps = currentConnection.prepareStatement(insertQuery1);
+						ps.setString(1, txtUsername.getText());
+						ps.executeUpdate();
+						ps = currentConnection.prepareStatement(insertQuery2);
+						ps.setString(1, txtUsername.getText());
 						ps.executeUpdate();
 					} catch (Exception e) {
 						e.printStackTrace();

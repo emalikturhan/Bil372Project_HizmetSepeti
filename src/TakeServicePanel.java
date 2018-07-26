@@ -1,10 +1,20 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
 class TakeServicePanel extends JPanel {
+
+    static Connection currentConnection = null;
+    static ResultSet rs = null;
+    static PreparedStatement ps = null;
+    static ConnectionManager connect = null;
+    static private DefaultListModel<String> listModel = new DefaultListModel<>();
+    static int count = 1;
 
     String txtCmb="";
     String txtCmb2="";
@@ -99,20 +109,33 @@ class TakeServicePanel extends JPanel {
             }
         });
 
-
-
-
-
-        DefaultListModel<String> listModel = new DefaultListModel<>();
-        // DUMMY DATAS
-        listModel.addElement("USA");
-        listModel.addElement("India");
-        listModel.addElement("Vietnam");
-        listModel.addElement("Canada");
-        listModel.addElement("Denmark");
-        listModel.addElement("France");
-        listModel.addElement("Great Britain");
-        listModel.addElement("Japan");
+        while(true) {
+            String query = "select service_id, fname, lname, appuser.user_id, service_name, service_type, location, price from service, appuser where service_id = " + count + " AND " +
+                    "appuser.user_id = service.user_id";
+            try {
+                connect = new ConnectionManager();
+                currentConnection = connect.getConnection();
+                ps = currentConnection.prepareStatement(query);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    if(!rs.getString("user_id").equals(Login.getUsername())) {
+                        String provider = rs.getString("fname") + rs.getString("lname");
+                        Query que = new Query(rs.getString("service_id"), provider, rs.getString("service_name")
+                                , rs.getString("service_type"), rs.getString("location"), rs.getString("price"));
+                        String str = "ID: " + que.id + "; Provider: " + que.provider + "; Name: " + que.name + "; Type: " + que.type + "; Location: " + que.location + "; Price: " + que.price;
+                        listModel.addElement(str);
+                        listModel.addElement("\n");
+                    }
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                finalizeConnection(currentConnection, ps, rs);
+            }
+            count++;
+        }
 
         //create the list
 
@@ -175,6 +198,30 @@ class TakeServicePanel extends JPanel {
         });
 
 
+    }
+    public static void finalizeConnection(Connection connection, PreparedStatement preparedStatement,
+                                          ResultSet resultSet) {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (Exception e) {
+            }
+            resultSet = null;
+        }
+        if (preparedStatement != null) {
+            try {
+                preparedStatement.close();
+            } catch (Exception e) {
+            }
+            preparedStatement = null;
+        }
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (Exception e) {
+            }
+            connection = null;
+        }
     }
 
 }
